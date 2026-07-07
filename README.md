@@ -1,3 +1,102 @@
+# Adaptive-RAG-Project
+
+> An **Adaptive RAG** chat application that decides *how much* retrieval each query actually needs — routing simple questions straight to the model, and running an iterative retrieve → judge → rewrite loop for the ones that need grounding.
+
+## Highlights
+
+- **Adaptive routing** — a query judge decides *before* searching whether retrieval is even needed, avoiding unnecessary lookups for simple queries.
+- **Iterative refinement loop** — after retrieval, a second judge evaluates result quality and rewrites/re-queries until the context is good enough (based on Gao et al., 2024, *"Retrieval-Augmented Generation for LLMs: A Survey"*).
+- **Neural information retrieval** over embedded documents using **DuckDB's vector-similarity search** with an **HNSW index** for fast approximate nearest-neighbor lookup.
+- **Sub-document chunking** for higher-precision retrieval instead of whole-document matching.
+- **Structured prompting** (TICOS / few-shot) for query rewriting and generation.
+- **100% local & open-source** — runs a ≤7B model via Ollama, with DuckDB for storage and marimo for the UI. No external APIs.
+- **Self-setup on first run** — downloads data and builds embeddings automatically, with a live progress bar.
+
+## Demo
+
+![Adaptive RAG chat interface](docs/demo.png)
+
+*The chat window (left) streams the system's live reasoning — routing decision, retrieval, and refinement steps — before appending the final answer. The document-search tab lets you query the embedded corpus directly via neural IR.*
+
+## Architecture
+
+The system uses a **two-layer separation of concerns**: `rag_core.py` is deliberately
+**UI-free** so the retrieval logic can be imported, scripted, and tested independently
+of the marimo frontend.
+
+```mermaid
+flowchart TD
+    Q[User query] --> JQ{judge_query<br/>retrieval needed?}
+    JQ -->|No| GEN[Generate answer directly]
+    JQ -->|Yes| RW[rewrite_query<br/>→ N diverse queries]
+    RW --> RET[retrieve<br/>neural IR over HNSW index]
+    RET --> JR{judge_retrieved<br/>context sufficient?}
+    JR -->|No, refine| RW
+    JR -->|Yes| GENR[Generate grounded answer]
+    GEN --> OUT[Streamed response]
+    GENR --> OUT
+```
+
+### Component Responsibilities
+
+| Layer | Component | Purpose |
+|-------|-----------|---------|
+| Presentation | `app.py` | Chat UI, Neural-IR search table, streaming |
+| Orchestration | `adaptive_chat()` generator | Drives the route → retrieve → judge loop |
+| Core logic | `rag_core.py` | All retrieval and LLM functions (UI-free) |
+| Vector store | DuckDB + HNSW | Indexed chunk embeddings (cosine metric) |
+| Models | Ollama | `qwen2.5:7b-instruct` + `nomic-embed-text` (768-dim) |
+
+### The Adaptive Loop
+
+Four functions drive the pipeline, each returning **strict JSON with safe fallbacks**.
+The loop terminates when `judge_retrieved()` decides the retrieved context is
+sufficient, at which point the grounded answer is generated:
+
+1. **`judge_query()`** — decides whether external documents are needed at all
+2. **`rewrite_query()`** — expands the query into N diverse search queries (default: 3)
+3. **`retrieve()`** — neural IR via cosine similarity over the HNSW index
+4. **`judge_retrieved()`** — self-critique: validates sufficiency or triggers refinement
+
+### Data Flow
+
+- **Ingestion (first run only, idempotent):** Simple-English Wikipedia is streamed,
+  chunked with sentence-awareness (~512 chars, 1-sentence overlap), embedded in
+  batches of 64, and indexed into DuckDB's HNSW index.
+- **Query time:** judge → rewrite → retrieve → judge → (refine loop) → generate,
+  with all intermediate reasoning streamed to the UI.
+
+## Tech Stack
+
+- **UI:** marimo (reactive notebook-as-app)
+- **Vector search:** DuckDB + VSS/HNSW (embedded, file-based, no external server)
+- **Chat model:** `qwen2.5:7b-instruct` via Ollama
+- **Embeddings:** `nomic-embed-text` (768-dim)
+- **Dataset:** Simple-English Wikipedia (capped at 1000 articles by default)
+
+## Setup
+
+```bash
+# Install dependencies (uses uv)
+uv sync
+
+# Make sure Ollama is running with the required models
+ollama pull qwen2.5:7b-instruct
+ollama pull nomic-embed-text
+
+# Run the app (sandboxed)
+uv run marimo run app.py --sandbox
+```
+
+On first launch the app downloads the data and builds the embeddings automatically,
+showing a progress bar. Subsequent runs reuse the persistent DuckDB file.
+
+## License
+
+MIT
+
+---
+
 # Adaptive RAG
 
 An **Adaptive Retrieval-Augmented Generation** chat application that decides *how much*
