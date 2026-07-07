@@ -1,0 +1,14 @@
+# Vector store / database (rebuilt on first run)
+*.duckdb
+*.duckdb.wal
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv

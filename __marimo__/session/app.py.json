@@ -1,0 +1,126 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.9",
+    "script_metadata_hash": "135f2e6ccc37dd6f333de1153be4d5ea"
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "3f00cf9c21cf98fabcff70025cfba276",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"adaptive-rag\">\ud83d\udd0e Adaptive RAG</h1>\n<span class=\"paragraph\">A retrieval-augmented chat that <strong>decides how much retrieval it needs</strong>:\nit judges the query, rewrites it into several search queries, retrieves\nfrom a DuckDB + HNSW vector store, judges whether the results are enough,\nand loops to refine if not.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "e53aa105dd073b7bfb4f818bb4b1cf9d",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "13bf1b3f26cdc1beb77d157084acbee9",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "ff1b8a8e5669002147c6cfcf30763a66",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">\u2705 <strong>Vector store ready</strong> \u2014 10490 chunks indexed (HNSW, cosine).</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "bc99ab6843b7fb992edd61a84604ce0e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='PKri-0' random-id='c3282ffb-9e6f-e16e-5d68-1a9a01dfdfab'><marimo-chatbot data-initial-value='{&quot;messages&quot;:[]}' data-label='null' data-show-configuration-controls='false' data-config='{&quot;max_tokens&quot;:4096,&quot;temperature&quot;:0.5,&quot;top_p&quot;:1,&quot;top_k&quot;:40,&quot;frequency_penalty&quot;:0,&quot;presence_penalty&quot;:0}' data-allow-attachments='false' data-disabled='false'></marimo-chatbot></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "80ecc0abdfcbd41785464a33c12df100",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h3 id=\"manual-document-search-neural-ir\">\ud83d\uddc2\ufe0f Manual document search (Neural IR)</h3></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "68352da65df91cac07027c8d21423784",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='SFPL-0' random-id='5a99264d-ac3e-ee15-8c19-92b29331c6bc'><marimo-text data-initial-value='&quot;&quot;' data-label='&quot;&#92;u003cspan class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&#92;u003e&#92;u003cspan class=&#92;&quot;paragraph&#92;&quot;&#92;u003eQuery&#92;u003c/span&#92;u003e&#92;u003c/span&#92;u003e&quot;' data-placeholder='&quot;Search the embedded documents\u2026&quot;' data-kind='&quot;text&quot;' data-full-width='true' data-disabled='false' data-debounce='true'></marimo-text></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "b332583a0572a479b7c39af0e7d3cd88",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><em>Type a query above to search the embedded documents.</em></span></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}
